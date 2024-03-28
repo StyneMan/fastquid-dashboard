@@ -59,14 +59,14 @@ const tabComponent = (tab, profile, mutate, matches) => {
       return <SecurityForm profile={profile} mutate={mutate} matches={matches} />;
     case 'Payment':
       return <PaymentForm profile={profile} mutate={mutate} matches={matches} />;
-    case 'DebitCard':
-      return <DebitCardForm profile={profile} mutate={mutate} matches={matches} />;
+    // case 'DebitCard':
+    //   return <DebitCardForm profile={profile} mutate={mutate} matches={matches} />;
     default:
       return <div />;
   }
 };
 
-const tabs = ['Profile', 'Security', 'Payment', 'DebitCard'];
+const tabs = ['Profile', 'Security', 'Payment'];
 
 function Profile(props) {
   const { profile } = props;

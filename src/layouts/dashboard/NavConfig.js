@@ -31,11 +31,7 @@ const navConfig = [
     path: '/dashboard/support',
     icon: getIcon('eva:message-square-outline'),
   },
-  {
-    title: 'Settings',
-    path: '/dashboard/settings',
-    icon: getIcon('eva:settings-outline'),
-  },
+  
 ];
 
 export default navConfig;

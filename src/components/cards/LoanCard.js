@@ -15,7 +15,7 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import axios from 'axios'
-import { CircularProgress } from '@mui/material'
+import { Checkbox, CircularProgress, FormControlLabel, FormGroup } from '@mui/material'
 import Iconify from '../Iconify'
 import formatCurrency from '../../utils/formatCurrency'
 import CustomModal from '../modal/CustomModal'
@@ -91,6 +91,8 @@ const axiosInstance2 = axios.create({
 const LoanCard = props => {
   const { matches, profile } = props
   const [done, setDone] = useState(false)
+  const [openTerms, setOpenTerms] = useState(false)
+  const [accepted, setAccepted] = useState(false)
   const [spinning, setSpinning] = useState(false)
   const [loading, stLoading] = useState(false)
   const [viewBalance, setViewBalance] = useState(true)
@@ -103,7 +105,6 @@ const LoanCard = props => {
   const [loanOffer, setLoanOffer] = useState({})
   const dispatch = useDispatch()
   const { mutate } = useSWRConfig()
-
 
   const flickConfig = {
     email: profile?.emailAddress,
@@ -146,7 +147,8 @@ const LoanCard = props => {
 
   const handleApply = () => {
     setModalTitle('Loan Application')
-    setOpenLoanForm(true)
+    setOpenTerms(true)
+    
   }
 
   const openPayStackModel = () => {
@@ -157,7 +159,7 @@ const LoanCard = props => {
   const onSuccess = response => {
     stLoading(true)
     // Implementation for whatever you want to do with reference and after success call.
-    const resp = APIService.post('/transaction/repay', {loan: profile?.loan, user: profile, response})
+    const resp = APIService.post('/transaction/repay', { loan: profile?.loan, user: profile, response })
     toast.promise(resp, {
       loading: 'loading...',
       success: res => {
@@ -183,23 +185,23 @@ const LoanCard = props => {
   }
 
   const handleRepay = () => {
-    console.log("FLIQUE:: ", flickConfig);
-    setSpinning(true);
+    console.log('FLIQUE:: ', flickConfig)
+    setSpinning(true)
     setReferenceName('LOAN_REPAYMENT_')
     setPayableAmount(profile?.loan?.totalAmountDue)
 
     stLoading(true)
 
     axiosInstance2
-      .post('/collection/create-charge', flickConfig, {headers: {"Access-Control-Allow-Origin": "*"},},)
+      .post('/collection/create-charge', flickConfig, { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then(res => {
         stLoading(false)
         console.log('FLICK RESPONSE CHECKOUT', res.data?.data)
         window.open(res.data?.data?.url, '_blank')
-        setSpinning(false);
+        setSpinning(false)
         // window.location.href=`${res.data?.data?.url}`.
 
-        onSuccess(res.data?.data);
+        onSuccess(res.data?.data)
 
         // Transaction response / ID
         // const transactionId = res.data?.data?.Id
@@ -207,13 +209,56 @@ const LoanCard = props => {
       .catch(error => {
         console.log('FLICK CHECKOUT ERROR ', error)
         stLoading(false)
-        setSpinning(false);
+        setSpinning(false)
       })
     // initializePayment(onSuccess, onClose);
   }
 
   return (
     <>
+      <CustomModal open={openTerms} setOpen={setOpenTerms} title={'Accept To Continue'} modalSize='sm'>
+        <Box py={2}>
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            Please be informed that in the event of default on your loan payments, Fastquid reserves the right to
+            recover the outstanding loan amount directly from your next salary through your employer.
+          </Typography>
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            This action will be taken in accordance with the terms and conditions agreed upon in your loan agreement. We
+            urge you to ensure timely repayment of your loan. Thank you
+          </Typography>
+
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            Click{' '}
+            <a href='https://fastquid.ng/terms' target='_blank' rel='noreferrer'>
+              here
+            </a>{' '}
+            to learn more about our terms of service.
+          </Typography>
+          <Box>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value={accepted}
+                    onChange={val => {
+                      setAccepted(!accepted)
+                    }}
+                  />
+                }
+                label='I agree and wish to continue with my loan request '
+              />
+            </FormGroup>
+            <br />
+            <Button disabled={!accepted} variant='contained' fullWidth onClick={() => {
+              setAccepted(false)
+              setOpenTerms(false)
+              setOpenLoanForm(true);
+            }} >
+              Continue to Loan Application
+            </Button>
+          </Box>
+        </Box>
+      </CustomModal>
       <CustomModal open={openLoanForm} setOpen={setOpenLoanForm} title={modalTitle} modalSize='sm'>
         <LoanForm
           profile={profile}
@@ -277,12 +322,9 @@ const LoanCard = props => {
                 sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
                 size='large'
                 fullWidth={!matches}
-                endIcon={ 
-                  spinning && <CircularProgress size={32} />
-                }
+                endIcon={spinning && <CircularProgress size={32} />}
               >
                 Repay Loan
-               
               </Button>
             ) : profile?.loan?.status === 'denied' ? (
               <Box display={'flex'} flexDirection='row' justifyContent={'space-between'} alignItems={'center'}>

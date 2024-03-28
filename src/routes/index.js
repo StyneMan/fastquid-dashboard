@@ -32,7 +32,6 @@ export default function Router({ isAuth, loading, profile, profileMutate }) {
         { path: 'transactions', element: <Transactions profile={profile} /> },
         { path: 'profile', element: <Profile profile={profile} /> },
         { path: 'support', element: <Support profile={profile} /> },
-        { path: 'settings', element: <Settings profile={profile} /> },
       ],
     }, 
     {

@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import APIService from '../../service';
@@ -91,7 +91,7 @@ function ProfileCard(props) {
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <div>
-                <HiddenInput accept="image/*" id="profile-image-file" type="file" onChange={handleUpload} />
+                {/* <HiddenInput accept="image/*" id="profile-image-file" type="file" onChange={handleUpload} /> */}
                 <label htmlFor="profile-image-file">
                   <Avatar
                     src={selectedFile}
@@ -107,11 +107,11 @@ function ProfileCard(props) {
                 {profile?.fullName}
               </ColoredTypography>
             </Box>
-            <label htmlFor="profile-image-file">
+            {/* <label htmlFor="profile-image-file">
               <Button variant="contained" component="span">
                 Change Profile Photo
               </Button>
-            </label>
+            </label> */}
           </Stack>
         </ContentBox>
       </CardContent>
