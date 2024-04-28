@@ -66,7 +66,7 @@ const Item = ({ keyName, value, alignLeft = false }) => (
   </Box>
 );
 
-const InfoCard = (props) => {
+const LoanCard = (props) => {
   const { matches, profile } = props;
   const [done, setDone] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
@@ -81,19 +81,8 @@ const InfoCard = (props) => {
   const [payableAmount, setPayableAmount] = useState(0);
   const [amount, setAmount] = useState(0);
   const [loanOffer, setLoanOffer] = useState({});
-  const dispatch = useDispatch();
   const { mutate } = useSWRConfig();
 
-  const flickConfig = {
-    email: profile?.emailAddress,
-    Phoneno: profile?.phoneNumber?.replace('+234', '0'),
-    amount: `${parseInt(payableAmount, 10) * 100}`,
-    currency_collected: 'NGN',
-    currency_settled: 'NGN',
-    redirectUrl: 'https://app.fastquid.ng/repayment',
-    transactionId: `Flick_repayment_${new Date().getTime()}`,
-    webhookUrl: 'https://fast-quid-api-service.vercel.app/api/loan/disburse-webhook',
-  };
 
   // const initializePayment = usePaystackPayment(config);
   const theme = useTheme();
@@ -162,8 +151,67 @@ const InfoCard = (props) => {
   // }
 
   return (
-    <>
-      <StyledCard variant="outlined" sx={{ borderRadius: 16 }}>
+    <div>
+      <CustomModal open={openTerms} setOpen={setOpenTerms} title={'Accept To Continue'} modalSize='sm'>
+        <Box py={2}>
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            Please be informed that in the event of default on your loan payments, Fastquid reserves the right to
+            recover the outstanding loan amount directly from your next salary through your employer.
+          </Typography>
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            This action will be taken in accordance with the terms and conditions agreed upon in your loan agreement. We
+            urge you to ensure timely repayment of your loan. Thank you
+          </Typography>
+
+          <Typography gutterBottom variant='body2' textAlign={'left'}>
+            Click{' '}
+            <a href='https://fastquid.ng/terms' target='_blank' rel='noreferrer'>
+              here
+            </a>{' '}
+            to learn more about our terms of service.
+          </Typography>
+          <Box>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value={accepted}
+                    onChange={val => {
+                      setAccepted(!accepted)
+                    }}
+                  />
+                }
+                label='I agree and wish to continue with my loan request '
+              />
+            </FormGroup>
+            <br />
+            <Button disabled={!accepted} variant='contained' fullWidth onClick={() => {
+              setAccepted(false)
+              setOpenTerms(false)
+              setOpenLoanForm(true);
+            }} >
+              Continue to Loan Application
+            </Button>
+          </Box>
+        </Box>
+      </CustomModal>
+      <CustomModal open={openLoanForm} setOpen={setOpenLoanForm} title={modalTitle} modalSize='sm'>
+        <LoanForm
+          profile={profile}
+          mutate={mutate}
+          loanOffer={loanOffer}
+          setLoanOffer={setLoanOffer}
+          loading={loading}
+          setLoading={stLoading}
+          toast={toast}
+          setOpenLoanForm={setOpenLoanForm}
+          setDone={setDone}
+        />
+      </CustomModal>
+      {/* <CustomModal open={openDebitCardModal} setOpen={setOpenDebitCardModal} title='Link Your DebitCard' modalSize='xs'>
+        <DebitCardComponent openPayStackModel={openPayStackModel} />
+      </CustomModal> */}
+      <StyledCard variant="outlined" sx={{ borderRadius: 2 }}>
         <CardContent>
           <Stack direction="row" justifyContent="space-between" alignItems="center" color={'white'}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -189,7 +237,7 @@ const InfoCard = (props) => {
             ) : (
               <ColoredTypography sx={{ color: 'white' }} color={'white'} variant="h2" gutterBottom>
                 {' '}
-                {formatCurrency(profile?.balance, 'usd')}{' '}
+                {formatCurrency(profile?.balance ?? 0, '')}{' '}
               </ColoredTypography>
             )}
 
@@ -204,7 +252,7 @@ const InfoCard = (props) => {
                 Apply For a Loan
               </Button>
             ) : profile?.loan?.status === 'credited' ? (
-              <div />
+              <Box p={2} />
             ) : // <Button
             //   variant='contained'
             //   sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
@@ -242,13 +290,13 @@ const InfoCard = (props) => {
         </CardContent>
         <Toaster />
       </StyledCard>
-    </>
+    </div>
   );
 };
 
-export default InfoCard;
+export default LoanCard;
 
-InfoCard.propTypes = {
+LoanCard.propTypes = {
   matches: PropType.bool.isRequired,
   profile: PropType.object,
 };

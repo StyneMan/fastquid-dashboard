@@ -198,13 +198,13 @@ function Loan(props) {
             </ListItem>
           </List>
           <List>
-            {loan?.status === 'credited' && (
+            {/* {loan?.status === 'credited' && (
               <ListItem>
                 <Button variant="contained" size="large" fullWidth onClick={handleRepay}>
                   Repay Loan
                 </Button>
               </ListItem>
-            )}
+            )} */}
           </List>
         </Box>
       </Drawer>

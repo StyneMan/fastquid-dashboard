@@ -577,7 +577,7 @@ const WorkComponent = ({
             </Box>
           )}
 
-          <StyledTextField
+          {/* <StyledTextField
             fullWidth
             autoComplete='address'
             type='text'
@@ -587,7 +587,7 @@ const WorkComponent = ({
             {...getFieldProps('companyLocation')}
             error={Boolean(touched.companyLocation && errors.companyLocation)}
             helperText={touched.companyLocation && errors.companyLocation}
-          />
+          /> */}
 
           <StyledTextField
             fullWidth
@@ -1094,7 +1094,7 @@ function LoanForm (props) {
       companyPhoneNumber: profile?.work?.companyPhoneNumber || '',
       companyEmailAddress: profile?.work?.companyEmailAddress || '',
       isCompanyEmailVerified: isCompanyEmailVerified || false,
-      jobTitle: profile?.work?.jobTitle || 'assistant',
+      jobTitle: profile?.work?.jobTitle || '',
       monthlyIncome: profile?.work?.monthlyIncome || '',
       payDay: new Date().getDate(), // date.setDate(profile?.work?.payDay || date.setDate(date.getDate)),
       isBankVerified: isBankVerified ?? false,
