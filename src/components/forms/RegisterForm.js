@@ -79,11 +79,20 @@ function RegisterForm(props) {
       .max(11, 'Phone Number must not be more than 11 digits'),
     emailAddress: Yup.string().email('Email must be a valid email address').required('Email is required'),
     gender: Yup.string().required('Gender is required'),
-    state: Yup.string().required('State is required'),
+    state: Yup.string().required('State of residence is required'),
     city: Yup.string().required('City is required'),
     address: Yup.string().required('Current Address is required'),
     dob: Yup.string().required('Date of Birth is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string()
+      .min(6, 'Minimum of 6 chars required!')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one number')
+      .matches(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        'Password must contain at least one special character',
+      )
+      .required('Password is required'),
   });
 
   const formik = useFormik({
@@ -251,7 +260,7 @@ function RegisterForm(props) {
           <Stack direction={{ xs: 'column', sm: 'row' }} alignItems="center" spacing={2}>
             <FormControl fullWidth>
               <InputLabel htmlFor="state" sx={{ bgcolor: 'background.paper' }}>
-                <em>Select your State</em>
+                <em>Select your state of residence</em>
               </InputLabel>
               <NativeSelect
                 input={<OutlinedInput variant="outlined" {...getFieldProps('state')} id="state" />}
@@ -266,7 +275,7 @@ function RegisterForm(props) {
             </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor="city" sx={{ bgcolor: 'background.paper' }}>
-                <em>Select your City</em>
+                <em>Select your LGA</em>
               </InputLabel>
               <NativeSelect input={<OutlinedInput variant="outlined" {...getFieldProps('city')} id="city" />} id="city">
                 {cities?.map((city) => (

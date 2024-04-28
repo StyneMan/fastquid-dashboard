@@ -79,9 +79,9 @@ const VerifyOtp = () => {
       </ContentStyle>
 
       <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} sx={{ my: 2 }}>
-        <Box sx={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+        <Box sx={{ color: 'rgba(0, 0, 0, 0.85)' }}>
           Didn't get the code?
-          <Button disabled={loading} variant="text" sx={{ color: 'white' }} onClick={handleResendOTP}>
+          <Button disabled={loading} variant="text" sx={{ color: 'black' }} onClick={handleResendOTP}>
             Resend Code
           </Button>
         </Box>
