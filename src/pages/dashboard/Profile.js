@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
 import { useSWRConfig } from 'swr';
 import { useState } from 'react';
@@ -11,7 +12,7 @@ import ProfileCard from '../../components/cards/ProfileCard';
 import ProfileForm from '../../components/forms/ProfileForm';
 import SecurityForm from '../../components/forms/SecurityForm';
 import PaymentForm from '../../components/forms/PaymentForm';
-import DebitCardForm from '../../components/forms/DebitCardForm';
+// import DebitCardForm from '../../components/forms/DebitCardForm';
 import Spacer from '../../components/spacer';
 
 function TabPanel(props) {

@@ -16,7 +16,7 @@ import Loan from '../pages/dashboard/Loan';
 import Transactions from '../pages/dashboard/Transactions';
 import Profile from '../pages/dashboard/Profile';
 import Support from '../pages/dashboard/Support';
-import Settings from '../pages/dashboard/Settings';
+// import Settings from '../pages/dashboard/Settings';
 
 // ----------------------------------------------------------------------
 

@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+// import PropTypes from 'prop-types';
 import { useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { styled } from '@mui/material/styles';

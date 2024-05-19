@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import PropType from 'prop-types';
 import { useState } from 'react';
 import * as Yup from 'yup';

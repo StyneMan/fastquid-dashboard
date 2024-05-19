@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

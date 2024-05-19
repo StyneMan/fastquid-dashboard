@@ -62,3 +62,7 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+
+//  rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' \
+//  -e "ssh -i ~/.ssh/fqwid-web-test.pem" \
+//  . ubuntu@ec2-13-60-84-32.eu-north-1.compute.amazonaws.com:~/app

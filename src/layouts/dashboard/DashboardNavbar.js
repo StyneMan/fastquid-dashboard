@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
 // material
 import { alpha, styled } from '@mui/material/styles';
@@ -9,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 // components
 import Iconify from '../../components/Iconify';
 //
-import Searchbar from './Searchbar';
+// import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import NotificationsPopover from './NotificationsPopover';
 

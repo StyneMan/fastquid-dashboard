@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
@@ -12,7 +13,7 @@ import Preloader from '../../components/loading/Preloader';
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled('div')(() => ({
   display: 'flex',
   minHeight: '100%',
   overflow: 'hidden',

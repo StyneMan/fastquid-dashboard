@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // routes
 import { toast } from 'react-hot-toast'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import Router from './routes'
 // theme
 import ThemeProvider from './theme'
@@ -16,7 +16,7 @@ import useCompany from './hooks/useCompany'
 import { setCompanies } from './store/reducer/company'
 import useSettings from './hooks/useSettings'
 import { setSettings } from './store/reducer/settings'
-import { baseURL } from './utils/axios'
+// import { baseURL } from './utils/axios'
 
 function App () {
   const { isAuth, profile } = useSelector(state => state.auth)

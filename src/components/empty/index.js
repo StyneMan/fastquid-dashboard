@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Stack from '@mui/material/Stack';
 
 const Empty = ({ text }) => (

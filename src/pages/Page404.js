@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 // components
 // ----------------------------------------------------------------------
 
-const ContentStyle = styled('div')(({ theme }) => ({
+const ContentStyle = styled('div')(() => ({
   margin: 'auto',
   textAlign: 'center',
 }));
@@ -38,3 +38,5 @@ export default function Page404() {
     </ContentStyle>
   );
 }
+
+// 

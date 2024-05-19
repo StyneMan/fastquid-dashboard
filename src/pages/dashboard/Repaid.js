@@ -1,8 +1,5 @@
-import PropType from 'prop-types';
-import { useEffect, useState } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
+// import useMediaQuery from '@mui/material/useMediaQuery';
 import { styled } from '@mui/material/styles';
-import { sentenceCase } from 'change-case';
 import Container from '@mui/material/Container';
 // import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
@@ -11,12 +8,10 @@ import Typography from '@mui/material/Typography';
 // import useSWR from 'swr'
 import { Box, Button } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import LoanCard from '../../components/cards/LoanCard';
 import Page from '../../components/Page';
 // import Iconify from '../../components/Iconify';
 import Advert from '../../components/advert';
 import Spacer from '../../components/spacer';
-import { useSWRFetch } from '../../hooks';
 // import image from "/static/images/home_banner.jpeg"
 
 const ColoredTypography = styled(Typography)(({ theme }) => ({
@@ -25,7 +20,7 @@ const ColoredTypography = styled(Typography)(({ theme }) => ({
 
 function Repaid() {
 //   const { profile } = props;
-  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+  // const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
 //   const [transactions, setTransactions] = useState([]);
   const location = useLocation();
   const navigate = useNavigate()

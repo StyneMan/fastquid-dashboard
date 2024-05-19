@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -47,7 +49,6 @@ const ColoredTypography = styled(Typography)(({ theme }) => ({
 const tabs = ['All', 'Loan', 'Account'];
 
 function Transactions(props) {
-  const { profile } = props;
   const [tab, setTab] = useState(0);
   const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
   const [transactions, setTransactions] = useState([]);

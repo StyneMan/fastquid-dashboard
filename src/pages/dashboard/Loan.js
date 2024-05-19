@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { usePaystackPayment } from 'react-paystack';
-import { useSWRConfig } from 'swr';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import toast, { Toaster } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { Toaster } from 'react-hot-toast';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
@@ -25,8 +24,6 @@ import formatCurrency from '../../utils/formatCurrency';
 import Iconify from '../../components/Iconify';
 import colorVariant from '../../utils/colorVariant';
 import Advert from '../../components/advert';
-import APIService from '../../service';
-import { updateProfile } from '../../store/reducer/auth';
 
 const ColoredTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.mode === 'light' ? theme.palette.primary.darker : theme.palette.primary.lighter,
@@ -67,66 +64,66 @@ const ItemList = ({ keyName, value, color, dark = false }) => (
 function Loan(props) {
   const { profile } = props;
   const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [loan, setLoan] = useState(profile?.loan);
-  const { mutate } = useSWRConfig();
-  const dispatch = useDispatch();
+  // const { mutate } = useSWRConfig();
+  // const dispatch = useDispatch();
 
-  const config = {
-    reference: `LOAN_REPAYMENT_${new Date().getTime().toString()}`,
-    email: profile?.emailAddress,
-    firstname: profile?.firstName,
-    lastname: profile?.lastName,
-    phone: profile?.phoneNumber?.replace('+234', '0'),
-    // eslint-disable-next-line radix
-    amount: parseInt(loan?.totalAmountDue) * 100,
-    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
-    channels: ['card'],
-  };
+  // const config = {
+  //   reference: `LOAN_REPAYMENT_${new Date().getTime().toString()}`,
+  //   email: profile?.emailAddress,
+  //   firstname: profile?.firstName,
+  //   lastname: profile?.lastName,
+  //   phone: profile?.phoneNumber?.replace('+234', '0'),
+  //   // eslint-disable-next-line radix
+  //   amount: parseInt(loan?.totalAmountDue) * 100,
+  //   publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
+  //   channels: ['card'],
+  // };
 
-  const initializePayment = usePaystackPayment(config);
-
-  // you can call this function anything
-  const onSuccess = (reference) => {
-    setLoading(true);
-    // Implementation for whatever you want to do with reference and after success call.
-    const response = APIService.post('/transaction/create', reference);
-    toast.promise(response, {
-      loading: 'loading',
-      success: (res) => {
-        console.log('response', res.data);
-        setLoading(false);
-        setLoan(res.data);
-        dispatch(
-          updateProfile({
-            key: 'loan',
-            value: res.data,
-          })
-        );
-        mutate('/auth/profile');
-        return 'Your Loan Has Been Settled Successfully!';
-      },
-      error: (err) => {
-        setLoading(false);
-        return err?.response?.data?.message || err?.message || 'Something went wrong, try again.';
-      },
-    });
-  };
+  // const initializePayment = usePaystackPayment(config);
 
   // you can call this function anything
-  const onClose = () => {
-    setLoading(false);
-  };
+  // const onSuccess = (reference) => {
+  //   setLoading(true);
+  //   // Implementation for whatever you want to do with reference and after success call.
+  //   const response = APIService.post('/transaction/create', reference);
+  //   toast.promise(response, {
+  //     loading: 'loading',
+  //     success: (res) => {
+  //       console.log('response', res.data);
+  //       setLoading(false);
+  //       setLoan(res.data);
+  //       dispatch(
+  //         updateProfile({
+  //           key: 'loan',
+  //           value: res.data,
+  //         })
+  //       );
+  //       mutate('/auth/profile');
+  //       return 'Your Loan Has Been Settled Successfully!';
+  //     },
+  //     error: (err) => {
+  //       setLoading(false);
+  //       return err?.response?.data?.message || err?.message || 'Something went wrong, try again.';
+  //     },
+  //   });
+  // };
+
+  // you can call this function anything
+  // const onClose = () => {
+  //   setLoading(false);
+  // };
 
   const closeDetails = () => setOpenDetails(false);
 
   const handleAdvert = () => {};
 
-  const handleRepay = () => {
-    closeDetails();
-    initializePayment(onSuccess, onClose);
-  };
+  // const handleRepay = () => {
+  //   closeDetails();
+  //   initializePayment(onSuccess, onClose);
+  // };
 
   return (
     <Page title="Loan">

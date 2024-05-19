@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import PropType from 'prop-types';
 import { capitalCase } from 'change-case';
 import { styled } from '@mui/material/styles';

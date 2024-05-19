@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useRef, useState } from 'react';
 import { capitalCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';

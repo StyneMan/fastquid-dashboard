@@ -38,10 +38,10 @@ const RootStyle = styled('div')(({ theme }) => ({
 DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
   onCloseSidebar: PropTypes.func,
-  profile: PropTypes.object,
+  // profile: PropTypes.object,
 };
 
-export default function DashboardSidebar({ profile, isOpenSidebar, onCloseSidebar }) {
+export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const themer = useTheme();

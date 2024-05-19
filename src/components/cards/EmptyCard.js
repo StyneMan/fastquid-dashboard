@@ -1,4 +1,5 @@
-import PropType from 'prop-types';
+/* eslint-disable react/prop-types */
+
 import { styled, useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -16,7 +17,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const StyleCardContent = styled(CardContent)(({ theme }) => ({
+const StyleCardContent = styled(CardContent)(() => ({
   textAlign: 'center',
   height: '100%',
   display: 'flex',

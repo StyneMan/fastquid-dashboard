@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import PropType from 'prop-types';
 // import { capitalCase } from 'change-case';
 import { styled } from '@mui/material/styles';
@@ -20,7 +21,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   padding: 0,
 }));
 
-const StyleCardContent = styled(CardContent)(({ theme }) => ({
+const StyleCardContent = styled(CardContent)(() => ({
   textAlign: 'center',
   height: '100%',
   display: 'flex',

@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { set } from 'date-fns';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -66,7 +67,7 @@ export default function NotificationsPopover(props) {
     if (open) {
       updateNotifications();
     }
-  }, [open]);
+  }, [open, updateNotifications]);
 
   useEffect(() => {
     setShowMore(totalSlice < 5);
@@ -93,14 +94,14 @@ export default function NotificationsPopover(props) {
     setTotalSlice(showMore ? notifications?.length : 2);
   };
 
-  const updateNotifications = async () => {
+  const updateNotifications = useCallback(async () => {
     if (totalUnRead) {
       const response = await APIService.update('/notification', 'update-all', { read: true });
       if (response?.status === 200) {
         mutate();
       }
     }
-  };
+  }, [mutate, totalUnRead]);
 
   return (
     <>

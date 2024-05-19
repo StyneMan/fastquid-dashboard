@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-alert */
 import * as Yup from 'yup'
 import { useState, useEffect } from 'react'
@@ -23,7 +24,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { Avatar, Box, Button, Divider } from '@mui/material'
 import APIService from '../../service'
 // component
-import Iconify from '../Iconify'
+// import Iconify from '../Iconify'
 
 import StateApiService from '../../utils/stateApi'
 import CustomModal from '../modal/CustomModal'

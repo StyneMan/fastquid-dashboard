@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
 import PropType from 'prop-types';
 import { useEffect, useState } from 'react';
 // import { usePaystackPayment } from 'react-paystack'
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import { useSWRConfig } from 'swr';
-import { useDispatch } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -14,15 +15,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import axios from 'axios';
-import { Checkbox, CircularProgress, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import Iconify from '../Iconify';
 import formatCurrency from '../../utils/formatCurrency';
 import CustomModal from '../modal/CustomModal';
 import { LoanForm } from '../forms';
-import EmptyCard from './EmptyCard';
-import APIService from '../../service';
-import { updateProfile } from '../../store/reducer/auth';
 // import { setLoading } from "../../store/reducer/lifeCycle"
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -71,11 +68,11 @@ const LoanCard = (props) => {
   const [done, setDone] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [accepted, setAccepted] = useState(false);
-  const [spinning, setSpinning] = useState(false);
+  // const [spinning, setSpinning] = useState(false);
   const [loading, stLoading] = useState(false);
   const [viewBalance, setViewBalance] = useState(true);
   const [openLoanForm, setOpenLoanForm] = useState(false);
-  const [openDebitCardModal, setOpenDebitCardModal] = useState(false);
+  // const [openDebitCardModal, setOpenDebitCardModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [referenceName, setReferenceName] = useState('');
   const [payableAmount, setPayableAmount] = useState(0);
@@ -108,7 +105,7 @@ const LoanCard = (props) => {
     if (profile?.loan && !profile.debitCard) {
       // setOpenDebitCardModal(true);
     }
-  }, [done]);
+  }, [done, profile.debitCard, profile?.loan]);
 
   const handleViewBalance = () => setViewBalance(!viewBalance);
 
@@ -177,6 +174,7 @@ const LoanCard = (props) => {
                   <Checkbox
                     value={accepted}
                     onChange={val => {
+                      console.log(val);
                       setAccepted(!accepted)
                     }}
                   />

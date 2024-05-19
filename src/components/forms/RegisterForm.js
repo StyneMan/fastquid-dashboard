@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +61,7 @@ const marital = [
 ];
 
 function RegisterForm(props) {
-  const { mutate } = props;
+  // const { mutate } = props;
   const [loading, setLoading] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [states, setStates] = useState([]);

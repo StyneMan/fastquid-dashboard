@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Outlet, useLocation } from 'react-router-dom';
 // material
 import { styled, useTheme } from '@mui/material/styles';
@@ -11,7 +12,7 @@ import Preloader from '../../components/loading/Preloader';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

@@ -1,4 +1,5 @@
-import PropType from 'prop-types';
+/* eslint-disable react/prop-types */
+// import PropType from 'prop-types';
 import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -15,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import APIService from '../../service';
 import { useSWRFetch } from '../../hooks';
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
+const StyledTextField = styled(TextField)(() => ({
   marginBottom: 10,
   marginTop: 10,
 }));

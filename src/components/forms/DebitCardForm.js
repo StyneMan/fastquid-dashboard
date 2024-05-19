@@ -1,23 +1,19 @@
+/* eslint-disable react/prop-types */
 import { usePaystackPayment } from 'react-paystack';
 import toast, { Toaster } from 'react-hot-toast';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import DebitCard from '../cards/DebitCard';
 import EmptyCard from '../cards/EmptyCard';
-import CustomModal from '../modal/CustomModal';
-import Iconify from '../Iconify';
 import APIService from '../../service';
 import LoadingBackdrop from '../loading/Backdrop';
-import formatCurrency from '../../utils/formatCurrency';
 
 function DebitCardForm(props) {
   const { profile, mutate } = props;
   const [debitCard, setDebitCard] = useState(profile?.debitCard);
   const [loading, setLoading] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [ setOpenModal] = useState(false);
 
   const config = {
     reference: `LINK_${new Date().getTime().toString()}`,
