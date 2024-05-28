@@ -49,6 +49,15 @@ export default function NotificationsPopover(props) {
 
   const [open, setOpen] = useState(null);
 
+  const updateNotifications = useCallback(async () => {
+    if (totalUnRead) {
+      const response = await APIService.update('/notification', 'update-all', { read: true });
+      if (response?.status === 200) {
+        mutate();
+      }
+    }
+  }, [mutate, totalUnRead]);
+
   useEffect(() => {
     socket.on(`${profile?.id}-notification-created`, (payload) => {
       setNewNotification(payload);
@@ -94,14 +103,7 @@ export default function NotificationsPopover(props) {
     setTotalSlice(showMore ? notifications?.length : 2);
   };
 
-  const updateNotifications = useCallback(async () => {
-    if (totalUnRead) {
-      const response = await APIService.update('/notification', 'update-all', { read: true });
-      if (response?.status === 200) {
-        mutate();
-      }
-    }
-  }, [mutate, totalUnRead]);
+  
 
   return (
     <>

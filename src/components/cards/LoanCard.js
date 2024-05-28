@@ -15,7 +15,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, CircularProgress, FormControlLabel, FormGroup } from '@mui/material';
+import APIService from '../../service';
 import Iconify from '../Iconify';
 import formatCurrency from '../../utils/formatCurrency';
 import CustomModal from '../modal/CustomModal';
@@ -68,7 +69,7 @@ const LoanCard = (props) => {
   const [done, setDone] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [accepted, setAccepted] = useState(false);
-  // const [spinning, setSpinning] = useState(false);
+  const [spinning, setSpinning] = useState(false);
   const [loading, stLoading] = useState(false);
   const [viewBalance, setViewBalance] = useState(true);
   const [openLoanForm, setOpenLoanForm] = useState(false);
@@ -80,8 +81,6 @@ const LoanCard = (props) => {
   const [loanOffer, setLoanOffer] = useState({});
   const { mutate } = useSWRConfig();
 
-
-  // const initializePayment = usePaystackPayment(config);
   const theme = useTheme();
 
   useEffect(() => {
@@ -112,6 +111,73 @@ const LoanCard = (props) => {
   const handleApply = () => {
     setModalTitle('Loan Application');
     setOpenTerms(true);
+  };
+
+  console.log('USER PROFILE ::::', profile);
+
+  // Initialize direct debit here
+  const initDirectDebit = async () => {
+    try {
+      setSpinning(true);
+      stLoading(true);
+      
+      const date = new Date(); // Create a new Date object for the current date
+
+      const year = date.getFullYear(); // Get the full year (e.g., 2024)
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
+      const day = String(date.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
+
+      const formattedDate = `${year}-${month}-${day}`; // Construct the date string in the desired format
+
+      const payload = {
+        transactionId: `FQ_Ddebit_${new Date().getTime()}_${profile?.id}`,
+        emailAddress: profile?.emailAddress,
+        bvn: profile?.bvn,
+        phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
+        address: 'lagos, nigeria',
+        amount: `${profile?.loan?.totalAmountDue}`,
+        startDate: formattedDate,
+        endDate: formattedDate,
+        frequency: 'daily',
+        currency: 'NGN',
+      };
+
+      console.log("INSPECT PAYLOAD ::: ", payload);
+
+      const response = await APIService.post('/loan/direct-debit-init', payload);
+
+      setSpinning(false);
+      stLoading(false);
+
+      console.log("RESPONSE DDBIT :::: ", response.data);
+
+      if (response.status === 200) {
+        toast.success(`${response.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'}`);
+        // Now load url here
+        window.open(response.data?.data?.url, '_blank');
+      }
+
+      // toast.promise(response, {
+      //   loading: 'Loading...',
+      //   success: res => {
+      //     stLoading(false);
+      //     setSpinning(false);
+      //     console.log("OKAY OOH", res.date);
+      //     return res.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'
+      //   },
+      //   error: err => {
+      //     stLoading(false)
+      //     setSpinning(false);
+      //     console.log(err);
+      //     return err?.response?.data?.message ?? 'An error occurred!'
+      //   }
+      // })
+      
+    } catch (error) {
+      console.log("WHAT ?????", error);
+      setSpinning(false);
+      stLoading(false);
+    }
   };
 
   // const openPayStackModel = () => {
@@ -149,20 +215,20 @@ const LoanCard = (props) => {
 
   return (
     <div>
-      <CustomModal open={openTerms} setOpen={setOpenTerms} title={'Accept To Continue'} modalSize='sm'>
+      <CustomModal open={openTerms} setOpen={setOpenTerms} title={'Accept To Continue'} modalSize="sm">
         <Box py={2}>
-          <Typography gutterBottom variant='body2' textAlign={'left'}>
+          <Typography gutterBottom variant="body2" textAlign={'left'}>
             Please be informed that in the event of default on your loan payments, Fastquid reserves the right to
             recover the outstanding loan amount directly from your next salary through your employer.
           </Typography>
-          <Typography gutterBottom variant='body2' textAlign={'left'}>
+          <Typography gutterBottom variant="body2" textAlign={'left'}>
             This action will be taken in accordance with the terms and conditions agreed upon in your loan agreement. We
             urge you to ensure timely repayment of your loan. Thank you
           </Typography>
 
-          <Typography gutterBottom variant='body2' textAlign={'left'}>
+          <Typography gutterBottom variant="body2" textAlign={'left'}>
             Click{' '}
-            <a href='https://fastquid.ng/terms' target='_blank' rel='noreferrer'>
+            <a href="https://fastquid.ng/terms" target="_blank" rel="noreferrer">
               here
             </a>{' '}
             to learn more about our terms of service.
@@ -173,27 +239,32 @@ const LoanCard = (props) => {
                 control={
                   <Checkbox
                     value={accepted}
-                    onChange={val => {
+                    onChange={(val) => {
                       console.log(val);
-                      setAccepted(!accepted)
+                      setAccepted(!accepted);
                     }}
                   />
                 }
-                label='I agree and wish to continue with my loan request '
+                label="I agree and wish to continue with my loan request "
               />
             </FormGroup>
             <br />
-            <Button disabled={!accepted} variant='contained' fullWidth onClick={() => {
-              setAccepted(false)
-              setOpenTerms(false)
-              setOpenLoanForm(true);
-            }} >
+            <Button
+              disabled={!accepted}
+              variant="contained"
+              fullWidth
+              onClick={() => {
+                setAccepted(false);
+                setOpenTerms(false);
+                setOpenLoanForm(true);
+              }}
+            >
               Continue to Loan Application
             </Button>
           </Box>
         </Box>
       </CustomModal>
-      <CustomModal open={openLoanForm} setOpen={setOpenLoanForm} title={modalTitle} modalSize='sm'>
+      <CustomModal open={openLoanForm} setOpen={setOpenLoanForm} title={modalTitle} modalSize="sm">
         <LoanForm
           profile={profile}
           mutate={mutate}
@@ -250,16 +321,17 @@ const LoanCard = (props) => {
                 Apply For a Loan
               </Button>
             ) : profile?.loan?.status === 'credited' ? (
-              <Box p={2} />
-            ) : // <Button
-            //   variant='contained'
-            //   sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
-            //   size='large'
-            //   fullWidth={!matches}
-            //   endIcon={spinning && <CircularProgress size={32} />}
-            // >
-            //   Repay Loan
-            // </Button>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
+                size="large"
+                fullWidth={!matches}
+                endIcon={spinning && <CircularProgress size={32} />}
+                onClick={() => initDirectDebit()}
+              >
+                Repay Loan
+              </Button>
+            ) : //
             profile?.loan?.status === 'denied' ? (
               <Box display={'flex'} flexDirection="row" justifyContent={'space-between'} alignItems={'center'}>
                 <Button
