@@ -15,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { Checkbox, CircularProgress, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, CircularProgress, FormControlLabel, FormGroup, Toolbar } from '@mui/material';
 import APIService from '../../service';
 import Iconify from '../Iconify';
 import formatCurrency from '../../utils/formatCurrency';
@@ -73,6 +73,8 @@ const LoanCard = (props) => {
   const [loading, stLoading] = useState(false);
   const [viewBalance, setViewBalance] = useState(true);
   const [openLoanForm, setOpenLoanForm] = useState(false);
+  const [openDirectDebit, setOpenDirectDebit] = useState(false);
+  const [openMono, setOpenMono] = useState(false);
   // const [openDebitCardModal, setOpenDebitCardModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [referenceName, setReferenceName] = useState('');
@@ -82,6 +84,7 @@ const LoanCard = (props) => {
   const { mutate } = useSWRConfig();
 
   const theme = useTheme();
+
 
   useEffect(() => {
     if (profile?.loan) {
@@ -115,19 +118,31 @@ const LoanCard = (props) => {
 
   console.log('USER PROFILE ::::', profile);
 
+  function addOneDay(date) {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + 1);
+    return newDate;
+  }
+
   // Initialize direct debit here
   const initDirectDebit = async () => {
     try {
       setSpinning(true);
       stLoading(true);
-      
+
       const date = new Date(); // Create a new Date object for the current date
+      const tomorrow = addOneDay(date);
 
       const year = date.getFullYear(); // Get the full year (e.g., 2024)
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
       const day = String(date.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
 
+      const endYear = tomorrow.getFullYear(); // Get the full year (e.g., 2024)
+      const endMonth = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
+      const endDay = String(tomorrow.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
+
       const formattedDate = `${year}-${month}-${day}`; // Construct the date string in the desired format
+      const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Construct the date string in the desired format
 
       const payload = {
         transactionId: `FQ_Ddebit_${new Date().getTime()}_${profile?.id}`,
@@ -137,19 +152,19 @@ const LoanCard = (props) => {
         address: 'lagos, nigeria',
         amount: `${profile?.loan?.totalAmountDue}`,
         startDate: formattedDate,
-        endDate: formattedDate,
+        endDate: formattedEndDate,
         frequency: 'daily',
         currency: 'NGN',
       };
 
-      console.log("INSPECT PAYLOAD ::: ", payload);
+      console.log('INSPECT PAYLOAD ::: ', payload);
 
       const response = await APIService.post('/loan/direct-debit-init', payload);
 
       setSpinning(false);
       stLoading(false);
 
-      console.log("RESPONSE DDBIT :::: ", response.data);
+      console.log('RESPONSE DDBIT :::: ', response.data);
 
       if (response.status === 200) {
         toast.success(`${response.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'}`);
@@ -172,11 +187,11 @@ const LoanCard = (props) => {
       //     return err?.response?.data?.message ?? 'An error occurred!'
       //   }
       // })
-      
     } catch (error) {
-      console.log("WHAT ?????", error);
+      console.log('WHAT ?????', error);
       setSpinning(false);
       stLoading(false);
+      toast.error(`${error?.response?.data?.message || "An error occurred"}`)
     }
   };
 
@@ -212,6 +227,24 @@ const LoanCard = (props) => {
   //     },
   //   })
   // }
+
+  const initMono = async () => {
+    try {
+      const payload = {
+        fullName: `${profile?.firstName} ${profile?.lastName}`,
+        emailAddress: `${profile?.emailAddress}`
+      }
+      const response = await APIService.post('/bank/init-mono', payload);
+      console.log("INIT MONO RESPONSE :::: ", response.data);
+      if (response.status === 200) {
+        // toast.success(`${response.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'}`);
+        // Now load url here
+        window.open(response.data?.data?.mono_url, '_blank');
+      }
+    } catch (error) {
+      console.log("MONO INIT ERROR", error);
+    }
+  }
 
   return (
     <div>
@@ -256,7 +289,20 @@ const LoanCard = (props) => {
               onClick={() => {
                 setAccepted(false);
                 setOpenTerms(false);
-                setOpenLoanForm(true);
+                // if (profile?.bvn && !profile.directDebitAllowed) {
+                //   setOpenDirectDebit(true);
+                // }
+                // else {
+                //   setOpenLoanForm(true);
+                // }
+
+                if (!profile?.monoInfo) {
+                  setOpenMono(true)
+                }
+                else {
+                  setOpenLoanForm(true);
+                }
+                
               }}
             >
               Continue to Loan Application
@@ -277,9 +323,30 @@ const LoanCard = (props) => {
           setDone={setDone}
         />
       </CustomModal>
-      {/* <CustomModal open={openDebitCardModal} setOpen={setOpenDebitCardModal} title='Link Your DebitCard' modalSize='xs'>
-        <DebitCardComponent openPayStackModel={openPayStackModel} />
-      </CustomModal> */}
+      <CustomModal open={openDirectDebit} setOpen={setOpenDirectDebit} title="Consent to Direct Debit" modalSize="xs">
+        <Box>
+          <Typography gutterBottom py={2}>
+            You must consent to direct debit to proceed with your loan request. Click on the button below to setup
+          </Typography>
+          <br />
+          <Button variant="contained" disabled={spinning} onClick={initDirectDebit} fullWidth>
+            I Consent
+          </Button>
+        </Box>
+      </CustomModal>
+
+      <CustomModal open={openMono} setOpen={setOpenMono} title="Account Linking" modalSize="xs">
+        <Box>
+          <Typography gutterBottom py={2}>
+            As part of a compulsory KYC, you must link your bank account for better experience.
+          </Typography>
+          <br />
+          <Button variant="contained" disabled={spinning} onClick={initMono} fullWidth>
+            Proceed
+          </Button>
+        </Box>
+      </CustomModal>
+
       <StyledCard variant="outlined" sx={{ borderRadius: 2 }}>
         <CardContent>
           <Stack direction="row" justifyContent="space-between" alignItems="center" color={'white'}>
@@ -320,18 +387,19 @@ const LoanCard = (props) => {
               >
                 Apply For a Loan
               </Button>
-            ) : profile?.loan?.status === 'credited' ? (
-              <Button
-                variant="contained"
-                sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
-                size="large"
-                fullWidth={!matches}
-                endIcon={spinning && <CircularProgress size={32} />}
-                onClick={() => initDirectDebit()}
-              >
-                Repay Loan
-              </Button>
-            ) : //
+            ) :
+            // profile?.loan?.status === 'credited' ? (
+            //   <Button
+            //     variant="contained"
+            //     sx={{ bgcolor: 'white', color: theme.palette.primary.main }}
+            //     size="large"
+            //     fullWidth={!matches}
+            //     endIcon={spinning && <CircularProgress size={32} />}
+            //     onClick={() => initDirectDebit()}
+            //   >
+            //     Repay Loan
+            //   </Button>
+            // ) : //
             profile?.loan?.status === 'denied' ? (
               <Box display={'flex'} flexDirection="row" justifyContent={'space-between'} alignItems={'center'}>
                 <Button
@@ -358,7 +426,7 @@ const LoanCard = (props) => {
             </Stack>
           ) : null}
         </CardContent>
-        <Toaster />
+        <Toaster containerStyle={{zIndex: 10000}} />
       </StyledCard>
     </div>
   );
