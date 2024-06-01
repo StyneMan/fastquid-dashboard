@@ -96,18 +96,31 @@ const LoanCard = (props) => {
           : process.env.REACT_APP_LINK_DEBITCARD_CHARGE
       );
     }
+
+    if (profile?.loan.status === 'approved' && profile?.bvn && !profile.directDebitAllowed) {
+        setOpenDirectDebit(true);
+      }
   }, [profile]);
 
   useEffect(() => {
-    if (done && !profile?.debitCard) {
-      // open paystack modal
-      // setOpenDebitCardModal(true);
+    if (done && (!profile?.monoCode || profile?.monoCode === undefined)) {
+      // setup mono init here
+      setOpenMono(true);
     }
 
     if (profile?.loan && !profile.debitCard) {
       // setOpenDebitCardModal(true);
     }
-  }, [done, profile.debitCard, profile?.loan]);
+  }, [done, profile.debitCard, profile?.loan, profile?.monoCode,]);
+
+
+  useEffect(() => {
+    if (profile?.loan?.status === 'pending' && profile?.monoCode === undefined) {
+      // setup mono init here
+      setOpenMono(true);
+    }
+
+  }, [profile]);
 
   const handleViewBalance = () => setViewBalance(!viewBalance);
 
@@ -289,20 +302,7 @@ const LoanCard = (props) => {
               onClick={() => {
                 setAccepted(false);
                 setOpenTerms(false);
-                // if (profile?.bvn && !profile.directDebitAllowed) {
-                //   setOpenDirectDebit(true);
-                // }
-                // else {
-                //   setOpenLoanForm(true);
-                // }
-
-                if (!profile?.monoInfo) {
-                  setOpenMono(true)
-                }
-                else {
-                  setOpenLoanForm(true);
-                }
-                
+                setOpenLoanForm(true);
               }}
             >
               Continue to Loan Application
