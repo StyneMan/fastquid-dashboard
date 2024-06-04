@@ -129,7 +129,7 @@ const LoanCard = (props) => {
     setOpenTerms(true);
   };
 
-  console.log('USER PROFILE ::::', profile);
+  // console.log('USER PROFILE ::::', profile);
 
   function addOneDay(date) {
     const newDate = new Date(date);
@@ -163,9 +163,9 @@ const LoanCard = (props) => {
         bvn: profile?.bvn,
         phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
         address: 'lagos, nigeria',
-        amount: `${profile?.loan?.totalAmountDue}`,
+        amount: `${1000 * 100}`,
         startDate: formattedDate,
-        endDate: formattedEndDate,
+        endDate: formattedDate,
         frequency: 'daily',
         currency: 'NGN',
       };
