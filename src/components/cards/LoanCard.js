@@ -143,19 +143,19 @@ const LoanCard = (props) => {
       setSpinning(true);
       stLoading(true);
 
-      const date = new Date(); // Create a new Date object for the current date
-      const tomorrow = addOneDay(date);
+      const date = new Date(profile?.loan?.dueDate); // Create a new Date object for the current date
+      // const tomorrow = addOneDay(date);
 
       const year = date.getFullYear(); // Get the full year (e.g., 2024)
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
       const day = String(date.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
 
-      const endYear = tomorrow.getFullYear(); // Get the full year (e.g., 2024)
-      const endMonth = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
-      const endDay = String(tomorrow.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
+      // const endYear = tomorrow.getFullYear(); // Get the full year (e.g., 2024)
+      // const endMonth = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
+      // const endDay = String(tomorrow.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
 
       const formattedDate = `${year}-${month}-${day}`; // Construct the date string in the desired format
-      const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Construct the date string in the desired format
+      // const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Construct the date string in the desired format
 
       const payload = {
         transactionId: `FQ_Ddebit_${new Date().getTime()}_${profile?.id}`,
@@ -164,9 +164,7 @@ const LoanCard = (props) => {
         phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
         address: 'lagos, nigeria',
         amount: `${1000 * 100}`,
-        startDate: formattedDate,
-        endDate: formattedDate,
-        frequency: 'daily',
+        charge_date: formattedDate,
         currency: 'NGN',
       };
 
@@ -326,7 +324,7 @@ const LoanCard = (props) => {
       <CustomModal open={openDirectDebit} setOpen={setOpenDirectDebit} title="Consent to Direct Debit" modalSize="xs">
         <Box>
           <Typography gutterBottom py={2}>
-            You must consent to direct debit to proceed with your loan request. Click on the button below to setup
+            You must consent to direct debit to proceed with your loan request. Click on the button below to setup. Note that you will be charged ₦50 for direct debit setup. It will refunded once setup is complete.
           </Typography>
           <br />
           <Button variant="contained" disabled={spinning} onClick={initDirectDebit} fullWidth>
