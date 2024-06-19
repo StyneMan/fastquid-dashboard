@@ -163,7 +163,7 @@ const LoanCard = (props) => {
         bvn: profile?.bvn,
         phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
         address: 'lagos, nigeria',
-        amount: `${1000 * 100}`,
+        amount: `${profile?.loan?.totalAmountDue}`,
         charge_date: formattedDate,
         currency: 'NGN',
       };
@@ -180,7 +180,7 @@ const LoanCard = (props) => {
       if (response.status === 200) {
         toast.success(`${response.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'}`);
         // Now load url here
-        window.open(response.data?.data?.url, '_blank');
+        window.open(response.data?.data?.mono_url, '_blank');
       }
 
       // toast.promise(response, {
@@ -336,7 +336,7 @@ const LoanCard = (props) => {
       <CustomModal open={openMono} setOpen={setOpenMono} title="Account Linking" modalSize="xs">
         <Box>
           <Typography gutterBottom py={2}>
-            As part of a compulsory KYC, you must link your bank account for better experience.
+            As part of a compulsory KYC, you must link your bank account for better experience. Do ensure your bank account name is the same as your profile name
           </Typography>
           <br />
           <Button variant="contained" disabled={spinning} onClick={initMono} fullWidth>
