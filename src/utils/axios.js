@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const baseURL =  "https://fast-quid-api-service.vercel.app";  
-//   "https://server.fastquid.ng" //  // "http://192.168.24.247:8080"; "http://162.254.32.113:8080"; //
+export const baseURL = "https://fast-quid-api-service.vercel.app";  
+// "https://server.fastquid.ng" // "http://162.254.32.113:8080"; // "http://192.168.43.41:8080";
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api`,
@@ -18,9 +18,6 @@ axiosInstance.interceptors.request.use(async (req) => {
     }
     return req;
   } catch (error) {
-    // console.log('request: ', error.response.status)
-    // sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /home/root
-
     return Promise.reject(error);
   }
 });

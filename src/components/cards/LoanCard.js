@@ -182,6 +182,9 @@ const LoanCard = (props) => {
         // Now load url here
         window.open(response.data?.data?.mono_url, '_blank');
       }
+      else {
+        toast.error(`${response.data?.data?.response?.message}`)
+      }
 
       // toast.promise(response, {
       //   loading: 'Loading...',

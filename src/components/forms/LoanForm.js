@@ -355,6 +355,11 @@ function handleClick(
   setCompErrorText,
   companies
 ) {
+
+  if (!values.companyName) {
+    toast.error("Company name required!")
+    return;
+  }
   // Code to be executed when the element is clicked
   // console.log('VALU', values.companyName);
   const domain = companies.filter((elem) => elem?.label.toLowerCase() === values.companyName.toLowerCase());
@@ -365,8 +370,8 @@ function handleClick(
 
   // Check if company domain matches
   if (companyDomain === domain[0]?.domain || values.applicatonType === 'direct-loan') {
-    // console.log('EQUAL ');
-    setCompError(false);
+    // console.log('EQUAL '); Stanley225@
+    setCompError(false); 
     setCompErrorText('');
 
     setLoading(true);
@@ -522,8 +527,12 @@ const WorkComponent = ({
             type="email"
             label="Your Work Email"
             {...getFieldProps('companyEmailAddress')}
-            error={Boolean((touched.companyEmailAddress && errors.companyEmailAddress) || compError)}
-            helperText={(touched.companyEmailAddress && errors.companyEmailAddress) || compErrorText}
+            error={
+              Boolean((touched.companyEmailAddress && errors.companyEmailAddress) || compError)
+            }
+            helperText={
+              (touched.companyEmailAddress && errors.companyEmailAddress) || compErrorText
+            }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
