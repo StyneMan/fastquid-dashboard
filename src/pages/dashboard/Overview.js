@@ -4,20 +4,17 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled } from '@mui/material/styles'
 import { sentenceCase } from 'change-case'
 import Container from '@mui/material/Container'
-// import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 // components
-// import useSWR from 'swr'
 import { Box } from '@mui/material'
+import { Toaster } from 'react-hot-toast'
 import LoanCard from '../../components/cards/LoanCard'
 import Page from '../../components/Page'
-// import Iconify from '../../components/Iconify';
 import Advert from '../../components/advert'
 import TransactionList from '../../components/list/TransactionList'
 import Spacer from '../../components/spacer'
 import { useSWRFetch } from '../../hooks'
-// import image from "/static/images/home_banner.jpeg"
 
 const ColoredTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.mode === 'light' ? theme.palette.primary.darker : theme.palette.primary.lighter,
@@ -33,12 +30,10 @@ function Overview (props) {
 
   useEffect(() => {
     if (data) {
-      // console.log("DATARINA >>>", data);
       setTransactions(data)
     }
   }, [data])
 
-  // const handleAdvert = () => {}
 
   return (
     <Page title='Overview'>
@@ -66,6 +61,7 @@ function Overview (props) {
           </Grid>
         </Grid>
       </Container>
+      <Toaster />
     </Page>
   )
 }
