@@ -184,6 +184,8 @@ const LoanCard = (props) => {
         toast.success(`${response.data?.message ?? 'Operation Successfully!'}`);
         setPaymentInstruction(response.data?.message);
         setPayToData(response.data?.data);
+        setOpenPayInstruction(true)
+        setOpenDirectDebit(false)
         // Now load url here
         // window.open(response.data?.data?.mono_url, '_blank');
       } else {
@@ -333,7 +335,7 @@ const LoanCard = (props) => {
 
       <CustomModal open={openPayInstruction} setOpen={setOpenPayInstruction} title="Action Required" modalSize="xs">
         <Box>
-          <Typography gutterBottom py={2}>
+          <Typography gutterBottom textAlign={'left'} py={2}>
             {paymentInstruction}
           </Typography>
           <br />
@@ -348,7 +350,7 @@ const LoanCard = (props) => {
               <ListItem key={item?.account_number} divider>
                 <Box display={'flex'} flexDirection={'row'} justifyContent={'start'} alignItems={'center'}>
                   <img src={item?.icon} alt="" width={48} />
-                  <Box display={'flex'} flexDirection={'column'} justifyContent={'start'} alignItems={'start'}>
+                  <Box px={1} display={'flex'} flexDirection={'column'} justifyContent={'start'} alignItems={'start'}>
                     <Typography variant="h6">{item?.bank_name}</Typography>
                     <Typography fontSize={13}>{item?.account_number}</Typography>
                   </Box>

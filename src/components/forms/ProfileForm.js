@@ -270,6 +270,7 @@ function ProfileForm(props) {
                   <TextField
                     fullWidth
                     label="First name"
+                    disabled={!!profile?.kycDone}
                     {...getFieldProps('firstName')}
                     error={Boolean(touched.firstName && errors.firstName)}
                     helperText={touched.firstName && errors.firstName}
@@ -278,6 +279,7 @@ function ProfileForm(props) {
                   <TextField
                     fullWidth
                     label="Last name"
+                    disabled={!!profile?.kycDone}
                     {...getFieldProps('lastName')}
                     error={Boolean(touched.lastName && errors.lastName)}
                     helperText={touched.lastName && errors.lastName}
@@ -297,14 +299,14 @@ function ProfileForm(props) {
                   fullWidth
                   autoComplete="phone"
                   type="text"
-                  disabled
+                  disabled={!!profile?.kycDone}
                   label="Phone Number"
                   {...getFieldProps('phoneNumber')}
                   error={Boolean(touched.phoneNumber && errors.phoneNumber)}
                   helperText={touched.phoneNumber && errors.phoneNumber}
                 />
                 <Stack direction={{ xs: 'column', sm: 'row' }} alignItems="center" spacing={2}>
-                  <FormControl fullWidth disabled>
+                  <FormControl fullWidth disabled={!!profile?.kycDone}>
                     <InputLabel htmlFor="gender" sx={{ bgcolor: 'background.paper' }}>
                       <em>Select your Gender</em>
                     </InputLabel>
@@ -319,7 +321,7 @@ function ProfileForm(props) {
                       ))}
                     </NativeSelect>
                   </FormControl>
-                  <FormControl fullWidth disabled>
+                  <FormControl fullWidth disabled={!!profile?.kycDone}>
                     <InputLabel htmlFor="maritalStatus" sx={{ bgcolor: 'background.paper' }}>
                       <em>What's your marital status</em>
                     </InputLabel>
@@ -350,7 +352,7 @@ function ProfileForm(props) {
                   />
                 </LocalizationProvider> */}
                 <Stack direction={{ xs: 'column', sm: 'row' }} alignItems="center" spacing={2}>
-                  <FormControl fullWidth disabled>
+                  <FormControl fullWidth disabled={!!profile?.kycDone}>
                     <InputLabel htmlFor="state" sx={{ bgcolor: 'background.paper' }}>
                       <em>Select your State</em>
                     </InputLabel>
@@ -365,7 +367,7 @@ function ProfileForm(props) {
                       ))}
                     </NativeSelect>
                   </FormControl>
-                  <FormControl fullWidth disabled>
+                  <FormControl fullWidth disabled={!!profile?.kycDone}>
                     <InputLabel htmlFor="city" sx={{ bgcolor: 'background.paper' }}>
                       <em>Select your City</em>
                     </InputLabel>
@@ -389,6 +391,7 @@ function ProfileForm(props) {
                   label="Current Address"
                   minRows={2}
                   multiline
+                  disabled={!!profile?.kycDone}
                   {...getFieldProps('address')}
                   error={Boolean(touched.address && errors.address)}
                   helperText={touched.address && errors.address}
@@ -399,7 +402,14 @@ function ProfileForm(props) {
               <LoadingButton
                 fullWidth={!matches}
                 size="large"
-                onClick={() => setOpenDialog(true)}
+                onClick={() => {
+                  if (profile?.kycDone) {
+                    setOpenDialog(true);
+                  }
+                  else {
+                    formik.handleSubmit();
+                  }
+                }}
                 variant="contained"
                 loading={loading}
               >
