@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const baseURL = "https://fast-quid-api-service.vercel.app";  
-// "https://server.fastquid.ng" // "http://162.254.32.113:8080"; // "http://192.168.43.41:8080"; //
+// "https://server.fastquid.ng" // "http://162.254.32.113:8080"; 
+// "http://192.168.43.41:8080"; //
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api`,
