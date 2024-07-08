@@ -181,7 +181,6 @@ const LoanCard = (props) => {
       console.log('RESPONSE DDBIT :::: ', response.data);
 
       if (response.status === 200) {
-        toast.success(`${response.data?.message ?? 'Operation Successfully!'}`);
         setPaymentInstruction(response.data?.message);
         setPayToData(response.data?.data);
         setOpenPayInstruction(true)
