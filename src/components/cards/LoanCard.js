@@ -172,6 +172,7 @@ const LoanCard = (props) => {
       };
 
       // console.log('INSPECT PAYLOAD ::: ', payload);
+      // ssh -L 3306:localhost:3306 your_cpanel_username@your_domain_or_ip
 
       const response = await APIService.post('/loan/direct-debit-init', payload);
 
@@ -240,7 +241,7 @@ const LoanCard = (props) => {
           </Typography>
 
           <Typography gutterBottom variant="body2" textAlign={'left'}>
-            Click <Link to="/dashboard/profile">here</Link> to proceed.
+            Click <Link to="/dashboard/profile" style={{fontWeight: 700}} >here</Link> to proceed.
           </Typography>
         </Box>
       </CustomModal>
@@ -326,7 +327,14 @@ const LoanCard = (props) => {
             account name is the same as your profile name
           </Typography>
           <br />
-          <Button variant="contained" disabled={spinning} onClick={initMono} fullWidth>
+          <Button variant="contained" disabled={spinning} onClick={() => {
+            if (!profile?.location) {
+              setOpenAddress(true);
+            }
+            else {
+              initMono();
+            }
+          }} fullWidth>
             Proceed
           </Button>
         </Box>

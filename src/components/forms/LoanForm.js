@@ -304,7 +304,21 @@ const BankComponent = ({ touched, errors, getFieldProps, banks, values, setField
         <em>Select Bank</em>
       </InputLabel>
       <NativeSelect
-        input={<OutlinedInput variant="outlined" {...getFieldProps('bankCode')} id="bankCode" />}
+        input={
+          <OutlinedInput
+            variant="outlined"
+            onChange={(e) => {
+              setFieldValue('bankCode', e.target?.value);
+              console.log("IOEJDK ::: ");
+              setFieldValue('accountNumber', '');
+              setFieldValue('accountName', '');
+            }}
+            value={values?.bankCode}
+
+            // {...getFieldProps('bankCode')}
+            id="bankCode"
+          />
+        }
         id="bankCode"
       >
         {banks?.map((item, index) => (
@@ -355,9 +369,8 @@ function handleClick(
   setCompErrorText,
   companies
 ) {
-
   if (!values.companyName) {
-    toast.error("Company name required!")
+    toast.error('Company name required!');
     return;
   }
   // Code to be executed when the element is clicked
@@ -371,7 +384,7 @@ function handleClick(
   // Check if company domain matches
   if (companyDomain === domain[0]?.domain || values.applicatonType === 'direct-loan') {
     // console.log('EQUAL '); Stanley225@
-    setCompError(false); 
+    setCompError(false);
     setCompErrorText('');
 
     setLoading(true);
@@ -527,12 +540,8 @@ const WorkComponent = ({
             type="email"
             label="Your Work Email"
             {...getFieldProps('companyEmailAddress')}
-            error={
-              Boolean((touched.companyEmailAddress && errors.companyEmailAddress) || compError)
-            }
-            helperText={
-              (touched.companyEmailAddress && errors.companyEmailAddress) || compErrorText
-            }
+            error={Boolean((touched.companyEmailAddress && errors.companyEmailAddress) || compError)}
+            helperText={(touched.companyEmailAddress && errors.companyEmailAddress) || compErrorText}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
