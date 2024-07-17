@@ -101,14 +101,14 @@ const LoanCard = (props) => {
     }
 
     if (profile?.loan?.status === 'approved' && profile?.bvn && !profile?.directDebitAllowed) {
-      setOpenDirectDebit(true);
+      // setOpenDirectDebit(true);
     }
   }, [profile]);
 
   useEffect(() => {
-    if (done && (!profile?.monoCode || profile?.monoCode === undefined)) {
+    if (done && (!profile?.monoCode || profile?.monoCode === undefined || !profile?.accountLinked)) {
       // setup mono init here
-      setOpenMono(true);
+      // setOpenMono(true);
     }
 
     if (profile?.loan && !profile?.debitCard) {
@@ -119,7 +119,7 @@ const LoanCard = (props) => {
   useEffect(() => {
     if (profile?.loan?.status === 'pending' && profile?.monoCode === undefined) {
       // setup mono init here
-      setOpenMono(true);
+      // setOpenMono(true);
     }
   }, [profile]);
 
@@ -141,96 +141,97 @@ const LoanCard = (props) => {
   }
 
   // Initialize direct debit here
-  const initDirectDebit = async () => {
-    try {
-      setSpinning(true);
-      stLoading(true);
+  // const initDirectDebit = async () => {
+  //   try {
+  //     setSpinning(true);
+  //     stLoading(true);
 
-      const date = new Date(profile?.loan?.dueDate); // Create a new Date object for the current date
-      // const tomorrow = addOneDay(date);
+  //     const date = new Date(profile?.loan?.dueDate); // Create a new Date object for the current date
+  //     // const tomorrow = addOneDay(date);
 
-      const year = date.getFullYear(); // Get the full year (e.g., 2024)
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
-      const day = String(date.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
+  //     const year = date.getFullYear(); // Get the full year (e.g., 2024)
+  //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
+  //     const day = String(date.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
 
-      // const endYear = tomorrow.getFullYear(); // Get the full year (e.g., 2024)
-      // const endMonth = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
-      // const endDay = String(tomorrow.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
+  //     // const endYear = tomorrow.getFullYear(); // Get the full year (e.g., 2024)
+  //     // const endMonth = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Get the month and pad it to 2 digits
+  //     // const endDay = String(tomorrow.getDate()).padStart(2, '0'); // Get the day and pad it to 2 digits
 
-      const formattedDate = `${year}-${month}-${day}`; // Construct the date string in the desired format
-      // const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Construct the date string in the desired format
+  //     const formattedDate = `${year}-${month}-${day}`; // Construct the date string in the desired format
+  //     // const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Construct the date string in the desired format
 
-      const payload = {
-        transactionId: `Ref${new Date().getTime()}FQ`,
-        emailAddress: profile?.emailAddress,
-        bvn: profile?.bvn,
-        phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
-        address: 'lagos, nigeria',
-        amount: `${profile?.loan?.totalAmountDue}`,
-        charge_date: formattedDate,
-        currency: 'NGN',
-      };
+  //     const payload = {
+  //       transactionId: `Ref${new Date().getTime()}FQ`,
+  //       emailAddress: profile?.emailAddress,
+  //       bvn: profile?.bvn,
+  //       phoneNumber: `${profile?.nationalFormat}`.replace(/\s+/g, ''),
+  //       address: 'lagos, nigeria',
+  //       amount: `${profile?.loan?.totalAmountDue}`,
+  //       charge_date: formattedDate,
+  //       currency: 'NGN',
+  //     };
 
-      // console.log('INSPECT PAYLOAD ::: ', payload);
-      // ssh -L 3306:localhost:3306 your_cpanel_username@your_domain_or_ip
+  //     // console.log('INSPECT PAYLOAD ::: ', payload);
+  //     // ssh -L 3306:localhost:3306 your_cpanel_username@your_domain_or_ip
 
-      const response = await APIService.post('/loan/direct-debit-init', payload);
+  //     const response = await APIService.post('/loan/direct-debit-init', payload);
 
-      setSpinning(false);
-      stLoading(false);
+  //     setSpinning(false);
+  //     stLoading(false);
 
-      console.log('RESPONSE DDBIT :::: ', response.data);
+  //     console.log('RESPONSE DDBIT :::: ', response.data);
 
-      if (response.status === 200) {
-        setPaymentInstruction(response.data?.message);
-        setPayToData(response.data?.data);
-        setOpenPayInstruction(true)
-        setOpenDirectDebit(false)
-        // Now load url here
-        // window.open(response.data?.data?.mono_url, '_blank');
-      } else {
-        toast.error(`${response.data?.data?.response?.message}`);
-      }
+  //     if (response.status === 200) {
+  //       setPaymentInstruction(response.data?.message);
+  //       setPayToData(response.data?.data);
+  //       setOpenPayInstruction(true)
+  //       setOpenDirectDebit(false)
+  //       // Now load url here
+  //       // window.open(response.data?.data?.mono_url, '_blank');
+  //     } else {
+  //       toast.error(`${response.data?.data?.response?.message}`);
+  //     }
 
-      // toast.promise(response, {
-      //   loading: 'Loading...',
-      //   success: res => {
-      //     stLoading(false);
-      //     setSpinning(false);
-      //     console.log("OKAY OOH", res.date);
-      //     return res.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'
-      //   },
-      //   error: err => {
-      //     stLoading(false)
-      //     setSpinning(false);
-      //     console.log(err);
-      //     return err?.response?.data?.message ?? 'An error occurred!'
-      //   }
-      // })
-    } catch (error) {
-      console.log('WHAT ?????', error);
-      setSpinning(false);
-      stLoading(false);
-      toast.error(`${error?.response?.data?.message || 'An error occurred'}`);
-    }
-  };
+  //     // toast.promise(response, {
+  //     //   loading: 'Loading...',
+  //     //   success: res => {
+  //     //     stLoading(false);
+  //     //     setSpinning(false);
+  //     //     console.log("OKAY OOH", res.date);
+  //     //     return res.data?.message ?? 'Your Direct Debit Has Been Initiated Successfully!'
+  //     //   },
+  //     //   error: err => {
+  //     //     stLoading(false)
+  //     //     setSpinning(false);
+  //     //     console.log(err);
+  //     //     return err?.response?.data?.message ?? 'An error occurred!'
+  //     //   }
+  //     // })
+  //   } catch (error) {
+  //     console.log('WHAT ?????', error);
+  //     setSpinning(false);
+  //     stLoading(false);
+  //     toast.error(`${error?.response?.data?.message || 'An error occurred'}`);
+  //   }
+  // };
 
-  const initMono = async () => {
-    try {
-      const payload = {
-        fullName: `${profile?.firstName} ${profile?.lastName}`,
-        emailAddress: `${profile?.emailAddress}`,
-      };
-      const response = await APIService.post('/bank/init-mono', payload);
-      console.log('INIT MONO RESPONSE :::: ', response.data);
-      if (response.status === 200) {
-        // Now load url here
-        window.open(response.data?.data?.mono_url, '_blank');
-      }
-    } catch (error) {
-      console.log('MONO INIT ERROR', error);
-    }
-  };
+  // const initMono = async () => {
+  //   try {
+  //     const payload = {
+  //       fullName: `${profile?.firstName} ${profile?.lastName}`,
+  //       emailAddress: `${profile?.emailAddress}`,
+  //     };
+  //     const response = await APIService.post('/bank/init-mono', payload);
+  //     console.log('INIT MONO RESPONSE :::: ', response.data);
+  //     if (response.status === 200) {
+  //       // Now load url here
+  //       setOpenMono(false);
+  //       window.open(response.data?.data?.mono_url, '_blank');
+  //     }
+  //   } catch (error) {
+  //     console.log('MONO INIT ERROR', error);
+  //   }
+  // };
 
   return (
     <div>
@@ -241,7 +242,11 @@ const LoanCard = (props) => {
           </Typography>
 
           <Typography gutterBottom variant="body2" textAlign={'left'}>
-            Click <Link to="/dashboard/profile" style={{fontWeight: 700}} >here</Link> to proceed.
+            Click{' '}
+            <Link to="/dashboard/profile" style={{ fontWeight: 700 }}>
+              here
+            </Link>{' '}
+            to proceed.
           </Typography>
         </Box>
       </CustomModal>
@@ -314,7 +319,14 @@ const LoanCard = (props) => {
             that you will be charged ₦50 for direct debit setup. It will refunded once setup is complete.
           </Typography>
           <br />
-          <Button variant="contained" disabled={spinning} onClick={initDirectDebit} fullWidth>
+          <Button
+            variant="contained"
+            disabled={spinning}
+            onClick={() => {
+              // initDirectDebit();
+            }}
+            fullWidth
+          >
             I Consent
           </Button>
         </Box>
@@ -327,14 +339,18 @@ const LoanCard = (props) => {
             account name is the same as your profile name
           </Typography>
           <br />
-          <Button variant="contained" disabled={spinning} onClick={() => {
-            if (!profile?.location) {
-              setOpenAddress(true);
-            }
-            else {
-              initMono();
-            }
-          }} fullWidth>
+          <Button
+            variant="contained"
+            disabled={spinning}
+            onClick={() => {
+              if (!profile?.location) {
+                setOpenAddress(true);
+              } else {
+                // initMono();
+              }
+            }}
+            fullWidth
+          >
             Proceed
           </Button>
         </Box>
